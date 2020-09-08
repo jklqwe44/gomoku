@@ -44,8 +44,10 @@ body {
     position: absolute;
     height: 39px;
     width: 39px;
-    margin-top: 40px;
-    margin-left: 40px;
+    margin-top: 20px;
+    margin-bottom: -20px;
+    margin-left: 20px;
+    margin-right: -20px;
     border: 1px solid black;
     pointer-events: none;
   }  
@@ -57,11 +59,13 @@ body {
   color: rgba(0, 0, 0, 60%);
 
   &.col {
-    margin-top: -32px;
+    margin-top: -16px;
+    margin-bottom: 16px;
   }
 
   &.row {
-    margin-left: -32px;
+    margin-left: -16px;
+    margin-right: 16px;
   }
 }
 

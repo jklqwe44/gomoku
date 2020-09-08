@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/classnames@2.2.6/index.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
   </head>
   <body>
     <div id="root"></div>
@@ -102,11 +102,11 @@
                 onMouseOut={() => recordHover(null)}
                 onClick={() => recordClick(round)}
               >
-                <div className="record-round">
+                <div className="round">
                   {round + 1}
                 </div>
-                <div className="record-info">
-                  <Piece className="record-piece" value={player} />
+                <div className="info">
+                  <Piece className="piece" value={player} />
                   {`${String.fromCharCode(col + 65)},${row + 1}`}
                 </div>
               </div>
@@ -118,8 +118,8 @@
       // 遊戲狀態
       const GameInfo = ({ round, player, isWin }) => (
         <div className="game-info">
-          <Piece className="info-piece" value={player} />
-          <div className="info-text">
+          <Piece className="piece" value={player} />
+          <div className="text">
             {isWin ? 'Win' : `Round ${round + 1}`}
           </div>
         </div>
@@ -145,7 +145,7 @@
       const Board = ({ squares, onSquareClick }) => (
         <div className="board">
           {Array(BOARD_SIZE).fill(null).map((_, i) => 
-            <div key={`row-${i}`} className="board-row">
+            <div key={`row-${i}`} className="row">
               {Array(BOARD_SIZE).fill(null).map((_, j) => 
                 {
                   const index = i*BOARD_SIZE + j

@@ -11,29 +11,48 @@ body {
   user-select: none;
 }
 
+.board-width-container {
+  width: 96%;
+  max-width: 80vh;
+  padding: 0 2%;
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+
 .board {
+  position: absolute;
+  left: 0;
+  top: 0; 
+  width: 100%;
+  height: 100%;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
   margin: 10px auto 20px;
-  padding: 15px;
+  padding: 2%;
+  box-sizing: border-box;
   border: 1.5px solid black;
   background: linear-gradient(to right, rgb(172, 127, 5), rgb(181, 136, 12), rgb(169, 126, 4), rgb(160, 119, 7));
 
   .row {
     display: flex;
     flex-direction: row;
+    flex: 1;
   }
 }
 
 .square {
-  height: 40px;
-  width: 40px;
-  font-size: 60px;
-  font-weight: bold;
+  position: relative;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center; 
   cursor: pointer;
+  // border: 1px solid red;
 
   &:focus {
     outline: none;
@@ -42,12 +61,12 @@ body {
   &.has-backline::after {
     content: "";
     position: absolute;
-    height: 39px;
-    width: 39px;
-    margin-top: 20px;
-    margin-bottom: -20px;
-    margin-left: 20px;
-    margin-right: -20px;
+    height: calc(100% - 1px);
+    width: calc(100% - 1px);
+    margin-top: 50%;
+    margin-bottom: -50%;
+    margin-left: 50%;
+    margin-right: -50%;
     border: 1px solid black;
     pointer-events: none;
   }  
@@ -55,23 +74,23 @@ body {
 
 .coordinate {
   position: absolute;
-  font-size: 16px;
+  font-size: 18px;
   color: rgba(0, 0, 0, 60%);
 
   &.col {
-    margin-top: -16px;
-    margin-bottom: 16px;
+    margin-top: -40%;
+    margin-bottom: 40%;
   }
 
   &.row {
-    margin-left: -16px;
-    margin-right: 16px;
+    margin-left: -40%;
+    margin-right: 40%;
   }
 }
 
 .piece {
-  height: 34px;
-  width: 34px;
+  height: 85%;
+  width: 85%;
   border-radius: 50%;
   z-index: 1;
 

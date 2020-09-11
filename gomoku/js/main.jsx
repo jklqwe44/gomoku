@@ -125,27 +125,31 @@ const Square = ({ children, value, row, col, onClick }) => (
 
 // 棋盤
 const Board = ({ squares, onSquareClick }) => (
-  <div className="board">
-    {Array(BOARD_SIZE).fill(null).map((_, i) => 
-      <div key={`row-${i}`} className="row">
-        {Array(BOARD_SIZE).fill(null).map((_, j) => 
-          {
-            const index = i*BOARD_SIZE + j
-            const { player, isBlur } = squares[index]
-            return (
-              <Square
-                key={`square-${index}`}
-                row={i}
-                col={j}
-                onClick={() => onSquareClick(index)}
-              >
-                <Piece className={isBlur && 'blur'} value={player} />
-              </Square>
-            )
-          }
+  <div className="board-width-container">
+    <div className="board-container">
+      <div className="board">
+        {Array(BOARD_SIZE).fill(null).map((_, i) => 
+          <div key={`row-${i}`} className="row">
+            {Array(BOARD_SIZE).fill(null).map((_, j) => 
+              {
+                const index = i*BOARD_SIZE + j
+                const { player, isBlur } = squares[index]
+                return (
+                  <Square
+                    key={`square-${index}`}
+                    row={i}
+                    col={j}
+                    onClick={() => onSquareClick(index)}
+                  >
+                    <Piece className={isBlur && 'blur'} value={player} />
+                  </Square>
+                )
+              }
+            )}
+          </div>
         )}
       </div>
-    )}
+    </div>
   </div>
 )
 

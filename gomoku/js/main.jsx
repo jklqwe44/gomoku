@@ -59,18 +59,22 @@ const calculateWinner = squares => {
 }
 
 // 棋子
-const Piece = ({ className, value }) => (
+const Piece = ({ className, isBlur, value }) => (
   <div 
     className={classNames(
       "piece",
-      {'black': value === 1, "white": value === 2 }, 
+      {
+       "black": value === 1, 
+       "white": value === 2,
+       "blur": isBlur
+      }, 
       className
     )} 
   />
 )
 
 // 遊戲紀錄軸 可移入呈現 與 點擊跳轉 紀錄的盤面
-const GameRecord = React.forwardRef(({ list, recordHover, recordClick }, ref) => (
+const GameRecord = React.forwardRef(({ list, onRecordHover, onRecordClick }, ref) => (
   <div className="game-record" ref={ref}>
     {list.map(item => {
       const {player, index, round} = item
@@ -80,9 +84,9 @@ const GameRecord = React.forwardRef(({ list, recordHover, recordClick }, ref) =>
           className="game-record-item" 
           key={`game-record-${index}`}
           role="button"
-          onMouseOver={() => recordHover(round)}
-          onMouseOut={() => recordHover(null)}
-          onClick={() => recordClick(round)}
+          onMouseOver={() => onRecordHover(round)}
+          onMouseOut={() => onRecordHover(null)}
+          onClick={() => onRecordClick(round)}
         >
           <div className="round">
             {round + 1}
@@ -108,7 +112,7 @@ const GameInfo = ({ round, player, isWin }) => (
 )
 
 // 下棋格 與 底線、座標 
-const Square = ({ children, value, row, col, onClick }) => (
+const Square = ({ children, row, col, onClick }) => (
   <div 
     className={classNames(
       "square",
@@ -141,7 +145,7 @@ const Board = ({ squares, onSquareClick }) => (
                     col={j}
                     onClick={() => onSquareClick(index)}
                   >
-                    <Piece className={isBlur && 'blur'} value={player} />
+                    <Piece isBlur={isBlur} value={player} />
                   </Square>
                 )
               }
@@ -238,8 +242,8 @@ function Game() {
       <GameRecord 
         ref={gameRecordRef} 
         list={gameRecord}
-        recordHover={handleRecordHover}
-        recordClick={handleRecordClick}
+        onRecordHover={handleRecordHover}
+        onRecordClick={handleRecordClick}
       />
     </div>
   );

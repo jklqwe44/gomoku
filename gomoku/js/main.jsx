@@ -112,7 +112,7 @@ const GameInfo = ({ round, player, isWin }) => (
 )
 
 // 下棋格 與 底線、座標 
-const Square = ({ children, row, col, onClick }) => (
+const Square = ({ children, row, col, onClick, onMouseOver, onMouseOut }) => (
   <div 
     className={classNames(
       "square",
@@ -120,6 +120,8 @@ const Square = ({ children, row, col, onClick }) => (
     )} 
     role="button"
     onClick={onClick}
+    onMouseOver={onMouseOver}
+    onMouseOut={onMouseOut}
   >
     {children}
     {row === 0 && <div className='coordinate col'>{String.fromCharCode(col + 65)}</div>}
@@ -128,24 +130,27 @@ const Square = ({ children, row, col, onClick }) => (
 )
 
 // 棋盤
-const Board = ({ squares, onSquareClick }) => (
+const Board = ({ squares, hoveredSquare, onSquareClick, onSquareHover }) => (
   <div className="board-width-container">
     <div className="board-container">
-      <div className="board">
+      <div className="board"  onMouseOut={() => onSquareHover(null)}>
         {Array(BOARD_SIZE).fill(null).map((_, i) => 
           <div key={`row-${i}`} className="row">
             {Array(BOARD_SIZE).fill(null).map((_, j) => 
               {
                 const index = i*BOARD_SIZE + j
                 const { player, isBlur } = squares[index]
+                const { player: nowPlayer, index: hoverIndex} = hoveredSquare
+                const isHover = !player && hoverIndex === index
                 return (
                   <Square
                     key={`square-${index}`}
                     row={i}
                     col={j}
                     onClick={() => onSquareClick(index)}
+                    onMouseOver={() => onSquareHover(index)}
                   >
-                    <Piece isBlur={isBlur} value={player} />
+                    <Piece isBlur={isBlur || isHover} value={player || (isHover && nowPlayer)} />
                   </Square>
                 )
               }
@@ -164,7 +169,7 @@ function Game() {
   const [squares, setSquares] = React.useState(
     Array(BOARD_SIZE*BOARD_SIZE).fill({ player: null, round: null, isBlur: false})
   );
-
+  const [hoveredSquare, setHoveredSquare] = React.useState({ player: 1, index: null })
   // 遊戲紀錄scroll保持在最末
   React.useEffect(()=> {
     if(gameRecordRef.current) {
@@ -180,6 +185,7 @@ function Game() {
     } else {
     const newRound = nowRound + 1
       setGameInfo({ player: newRound % 2 + 1, round: newRound, isWin: false})
+      setHoveredSquare({ ...hoveredSquare, player: newRound % 2 + 1 })
     }
   }
 
@@ -199,6 +205,11 @@ function Game() {
 
       updateGameInfo(round, newSquares)
     }
+  }
+
+  // 滑鼠懸浮棋盤空格
+  const handleSquareHover = index => {
+    setHoveredSquare({...hoveredSquare, index})
   }
 
   // 預看紀錄 呈現記錄點盤面
@@ -237,7 +248,9 @@ function Game() {
       <GameInfo {...gameInfo} />
       <Board
         squares={squares}
+        hoveredSquare={hoveredSquare}
         onSquareClick={handleSquareClick}
+        onSquareHover={handleSquareHover}
       />
       <GameRecord 
         ref={gameRecordRef} 

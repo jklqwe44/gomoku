@@ -232,8 +232,15 @@ function Game() {
     updateGameInfo(round, newSquares)
   }
 
+  const { player, isWin } = gameInfo
+
   return (
-    <div className="game">
+    <div className={classNames(
+      "game",
+      {"black-round": !isWin && player === 1,
+        "white-round": !isWin && player === 2 }
+      )} 
+      >
       <GameInfo {...gameInfo} />
       <Board
         squares={squares}

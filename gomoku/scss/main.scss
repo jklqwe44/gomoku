@@ -94,39 +94,26 @@ body {
   border-radius: 50%;
   z-index: 1;
 
-  &.blur {
+  &.blur,
+  &.none {
     opacity: 0.3;
   }
 
-  &.black {
+  &.black,
+  .game.black-round .square:hover &.none {
     border: 1px solid rgb(65, 65, 65);
     background: radial-gradient(black 30%, rgba(0, 0, 0, 70%) 50%, transparent),
       linear-gradient(125deg, #bbb, black 60%, black);
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
   }
 
-  &.white {
+  &.white,
+  .game.white-round .square:hover &.none {
     border: 1px solid rgb(117, 117, 117);
     background: radial-gradient(white 30%, rgba(255, 255, 255, 70%) 60%, transparent),
       linear-gradient(125deg, white, white 50%, black);
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
   }
-}
-
-.game.black-round .square:hover .piece:not(.black):not(.white) {
-  border: 1px solid rgb(65, 65, 65);
-  background: radial-gradient(black 30%, rgba(0, 0, 0, 70%) 50%, transparent),
-    linear-gradient(125deg, #bbb, black 60%, black);
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-  opacity: 0.3;
-}
-
-.game.white-round .square:hover .piece:not(.black):not(.white) {
-  border: 1px solid rgb(117, 117, 117);
-  background: radial-gradient(white 30%, rgba(255, 255, 255, 70%) 60%, transparent),
-    linear-gradient(125deg, white, white 50%, black);
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-  opacity: 0.3;
 }
 
 .game-info {

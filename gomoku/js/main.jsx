@@ -64,6 +64,7 @@ const Piece = ({ className, isBlur, value }) => (
     className={classNames(
       "piece",
       {
+       "none": !value,
        "black": value === 1, 
        "white": value === 2,
        "blur": isBlur

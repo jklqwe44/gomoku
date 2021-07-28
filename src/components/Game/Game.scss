@@ -1,11 +1,5 @@
 $min-board-size: 200px;
 
-body {
-  font-family: Microsoft JhengHei, sans-serif;
-  background: rgb(30, 30, 30);
-  margin: 15px;
-}
-
 .game {
   display: flex;
   flex-direction: column;
@@ -115,7 +109,7 @@ body {
   &.white,
   .game.white-round .square:hover &.none {
     border: 1px solid rgb(117, 117, 117);
-    background: radial-gradient(white 30%, rgba(255, 255, 255, 70%) 60%, transparent),
+    background: radial-gradient(white 30%, rgba(255, 255, 255, 0.7) 60%, transparent),
       linear-gradient(125deg, white, white 50%, black);
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
   }
@@ -134,14 +128,14 @@ body {
   
   .text {
     font-size: 3vh;
-    color: rgba(255, 255, 255, 70%);
+    color: rgba(255, 255, 255, 0.7);
   }
 }
 
 
 .game-record {
   display: flex;
-  background: rgba(255, 255, 255, 10%);
+  background: rgba(255, 255, 255, 0.1);
   overflow-x: scroll;
   width: 100%;
   max-width: 70vh;
@@ -149,7 +143,7 @@ body {
   height: 140px;
 
   &:not(:hover) .game-record-item:last-child {
-    background: rgba(100, 160, 200, 30%);
+    background: rgba(100, 160, 200, 0.3);
   }
 
   .round {
@@ -177,14 +171,14 @@ body {
   align-items: center;
   padding: 5px 0 10px;
   min-width: 35px;
-  color: rgba(255, 255, 255, 70%);
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
 
   &:nth-child(even) {
-    background: rgba(255, 255, 255, 5%);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   &:hover {
-    background: rgba(100, 160, 200, 30%);
+    background: rgba(100, 160, 200, 0.3);
   }
 }

@@ -1,3 +1,8 @@
+/* eslint-disable react/prop-types */
+import React, { forwardRef } from "react";
+import classNames from "classnames";
+import './Game.scss';
+
 // 棋盤線數
 const BOARD_SIZE = 9
 // 連珠勝利條件
@@ -75,7 +80,8 @@ const Piece = ({ className, isBlur, value }) => (
 )
 
 // 遊戲紀錄軸 可移入呈現 與 點擊跳轉 紀錄的盤面
-const GameRecord = React.forwardRef(({ list, onRecordHover, onRecordClick }, ref) => (
+// eslint-disable-next-line react/display-name
+const GameRecord = forwardRef(({ list, onRecordHover, onRecordClick }, ref) => (
   <div className="game-record" ref={ref}>
     {list.map(item => {
       const {player, index, round} = item
@@ -158,7 +164,7 @@ const Board = ({ squares, onSquareClick }) => (
   </div>
 )
 
-function Game() {
+const Game = () => {
   const [gameInfo, setGameInfo] = React.useState({ player: 1, round: 0, isWin: false});
   const [gameRecord, setGameRecord] = React.useState([]);
   const gameRecordRef = React.useRef(null); 
@@ -257,4 +263,4 @@ function Game() {
   );
 }
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+export default Game;

@@ -1,58 +1,11 @@
 import React from "react";
 import classNames from "classnames";
-import { BOARD_SIZE, WIN_SIZE, NEIGHBOR_LIST, coordinate } from "../../config";
+import Axios from "axios";
+import { BOARD_SIZE } from "../../config";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
 import GameRecord from "../../components/GameRecord";
 import './Game.scss';
-
-
-// 計算勝負
-const calculateWinner = squares => {
-  let winner = null
-  squares.some((item,index,array) => {
-    const { player } = item
-    //格子不為空
-    if(player) { 
-      const {row , col } = coordinate(index)
-      //右方
-      let hasRight = col <= (BOARD_SIZE - WIN_SIZE) &&
-        NEIGHBOR_LIST.every(i => {
-          const { player: neighbor } = array[index+i]
-          return neighbor === player
-        })
-      
-      //下方
-      let hasDown = row <= (BOARD_SIZE - WIN_SIZE) &&
-        NEIGHBOR_LIST.every(i => {
-          const { player: neighbor } = array[index+BOARD_SIZE*i]
-          return neighbor === player
-        })
-      
-      //右下
-      let hasRightDown = col <= (BOARD_SIZE - WIN_SIZE) && 
-        row <= (BOARD_SIZE - WIN_SIZE) &&
-        NEIGHBOR_LIST.every(i => {
-          const { player: neighbor } = array[index+i+BOARD_SIZE*i]
-          return neighbor === player
-        })
-
-      //左下
-      let hasLeftDown = col >= WIN_SIZE - 1  &&
-        row <= (BOARD_SIZE - WIN_SIZE) &&
-        NEIGHBOR_LIST.every(i => {
-          const { player: neighbor } = array[index-i+BOARD_SIZE*i]
-          return neighbor === player
-        })
-
-      if(hasRight || hasDown || hasRightDown || hasLeftDown) {
-        winner=player
-        return true
-      }
-    }
-  })
-  return winner;
-}
 
 // 遊戲狀態
 const GameInfo = ({ round, player, isWin }) => (
@@ -81,13 +34,24 @@ const Game = () => {
 
   // 更新盤面狀態 執棋者 回合數 輸贏
   const updateGameInfo = (nowRound, newSquares) => {
-    const winner = calculateWinner(newSquares)
-    if(winner) {
-      setGameInfo({player: winner, round: nowRound, isWin: true})
-    } else {
-    const newRound = nowRound + 1
-      setGameInfo({ player: newRound % 2 + 1, round: newRound, isWin: false})
-    }
+      Axios.post(
+        `http://${location.hostname}:3000/calculateWinner`,
+        {
+          squares: newSquares
+        })
+      .then(function (response) {
+        const { winner } = response.data
+
+        if(winner) {
+          setGameInfo({player: winner, round: nowRound, isWin: true})
+        } else {
+          const newRound = nowRound + 1
+          setGameInfo({ player: newRound % 2 + 1, round: newRound, isWin: false})
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   }
 
   // 點擊棋盤空位 下棋

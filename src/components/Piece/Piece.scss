@@ -1,0 +1,27 @@
+.piece {
+  height: 85%;
+  width: 85%;
+  border-radius: 50%;
+  z-index: 1;
+
+  &.blur,
+  &.none {
+    opacity: 0.3;
+  }
+
+  &.black,
+  .game.black-round .square:hover &.none {
+    border: 1px solid rgb(65, 65, 65);
+    background: radial-gradient(black 30%, rgba(0, 0, 0, 70%) 50%, transparent),
+      linear-gradient(125deg, #bbb, black 60%, black);
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  &.white,
+  .game.white-round .square:hover &.none {
+    border: 1px solid rgb(117, 117, 117);
+    background: radial-gradient(white 30%, rgba(255, 255, 255, 0.7) 60%, transparent),
+      linear-gradient(125deg, white, white 50%, black);
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  }
+}

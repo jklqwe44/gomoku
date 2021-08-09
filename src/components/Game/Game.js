@@ -1,20 +1,11 @@
-/* eslint-disable react/prop-types */
-import React, { forwardRef } from "react";
+import React from "react";
 import classNames from "classnames";
+import { BOARD_SIZE, WIN_SIZE, NEIGHBOR_LIST, coordinate } from "../../config";
+import Board from "../../components/Board";
+import Piece from "../../components/Piece";
+import GameRecord from "../../components/GameRecord";
 import './Game.scss';
 
-// 棋盤線數
-const BOARD_SIZE = 9
-// 連珠勝利條件
-const WIN_SIZE = 5
-// 計算勝負用陣列
-const NEIGHBOR_LIST = Array(WIN_SIZE-1).fill(null).map((_,i) => i + 1)
-
-// 一維座標 轉 二維
-const coordinate = index => ({
-  row: Math.floor(index/BOARD_SIZE),
-  col: index%BOARD_SIZE
-})
 
 // 計算勝負
 const calculateWinner = squares => {
@@ -63,103 +54,12 @@ const calculateWinner = squares => {
   return winner;
 }
 
-// 棋子
-const Piece = ({ className, isBlur, value }) => (
-  <div 
-    className={classNames(
-      "piece",
-      {
-       "none": !value,
-       "black": value === 1, 
-       "white": value === 2,
-       "blur": isBlur
-      }, 
-      className
-    )} 
-  />
-)
-
-// 遊戲紀錄軸 可移入呈現 與 點擊跳轉 紀錄的盤面
-// eslint-disable-next-line react/display-name
-const GameRecord = forwardRef(({ list, onRecordHover, onRecordClick }, ref) => (
-  <div className="game-record" ref={ref}>
-    {list.map(item => {
-      const {player, index, round} = item
-      const {row , col } = coordinate(index)
-      return (
-        <div 
-          className="game-record-item" 
-          key={`game-record-${index}`}
-          role="button"
-          onMouseOver={() => onRecordHover(round)}
-          onMouseOut={() => onRecordHover(null)}
-          onClick={() => onRecordClick(round)}
-        >
-          <div className="round">
-            {round + 1}
-          </div>
-          <div className="info">
-            <Piece className="piece" value={player} />
-            {`${String.fromCharCode(col + 65)},${row + 1}`}
-          </div>
-        </div>
-      )
-    })}
-  </div>
-))
-
 // 遊戲狀態
 const GameInfo = ({ round, player, isWin }) => (
   <div className="game-info">
     <Piece className="piece" value={player} />
     <div className="text">
       {isWin ? 'Win' : `Round ${round + 1}`}
-    </div>
-  </div>
-)
-
-// 下棋格 與 底線、座標 
-const Square = ({ children, row, col, onClick }) => (
-  <div 
-    className={classNames(
-      "square",
-      {'has-backline': row < BOARD_SIZE-1 && col < BOARD_SIZE-1 }
-    )} 
-    role="button"
-    onClick={onClick}
-  >
-    {children}
-    {row === 0 && <div className='coordinate col'>{String.fromCharCode(col + 65)}</div>}
-    {col === 0 && <div className='coordinate row'>{row + 1}</div>}
-  </div>
-)
-
-// 棋盤
-const Board = ({ squares, onSquareClick }) => (
-  <div className="board-width-container">
-    <div className="board-container">
-      <div className="board">
-        {Array(BOARD_SIZE).fill(null).map((_, i) => 
-          <div key={`row-${i}`} className="row">
-            {Array(BOARD_SIZE).fill(null).map((_, j) => 
-              {
-                const index = i*BOARD_SIZE + j
-                const { player, isBlur } = squares[index]
-                return (
-                  <Square
-                    key={`square-${index}`}
-                    row={i}
-                    col={j}
-                    onClick={() => onSquareClick(index)}
-                  >
-                    <Piece isBlur={isBlur} value={player} />
-                  </Square>
-                )
-              }
-            )}
-          </div>
-        )}
-      </div>
     </div>
   </div>
 )

@@ -1,0 +1,80 @@
+$min-board-size: 200px;
+
+.board-width-container {
+  width: 100%;
+  max-width: 70vh;
+  min-width: $min-board-size;
+  margin: 10px 0;
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+
+.board {
+  position: absolute;
+  left: 0;
+  top: 0; 
+  width: 100%;
+  height: 100%;
+  max-height: 70vh;
+  min-height: $min-board-size;
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+  box-sizing: border-box;
+  border: 1.5px solid black;
+  background: linear-gradient(to right, rgb(172, 127, 5), rgb(181, 136, 12), rgb(169, 126, 4), rgb(160, 119, 7));
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+}
+
+.square {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.has-backline::after {
+    content: "";
+    position: absolute;
+    height: calc(100% - 1px);
+    width: calc(100% - 1px);
+    margin-top: 50%;
+    margin-bottom: -50%;
+    margin-left: 50%;
+    margin-right: -50%;
+    border: 1px solid black;
+    pointer-events: none;
+  }  
+}
+
+.coordinate {
+  position: absolute;
+  flex: 1;
+  font-size: 2vh;
+  color: rgba(0, 0, 0, 60%);
+
+  &.col {
+    margin-top: -40%;
+    margin-bottom: 40%;
+  }
+
+  &.row {
+    margin-left: -40%;
+    margin-right: 40%;
+  }
+}

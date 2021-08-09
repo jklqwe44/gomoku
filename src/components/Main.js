@@ -3,7 +3,6 @@ import Game from "./Game";
 import './Main.scss';
 
 const Main = () => {
-  console.warn('!!!!');
   return <Game />
 }
 

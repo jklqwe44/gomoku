@@ -17,10 +17,17 @@ const GameInfo = ({ round, player, isWin }) => (
   </div>
 )
 
+// 一維座標 轉 二維
+const coordinate = index => ({
+  row: Math.floor(index/BOARD_SIZE),
+  col: index%BOARD_SIZE
+})
+
 const Game = () => {
   const [gameInfo, setGameInfo] = React.useState({ player: 1, round: 0, isWin: false});
   const [gameRecord, setGameRecord] = React.useState([]);
   const gameRecordRef = React.useRef(null); 
+  const [isLoading, setIsLoading] = React.useState(false);
   const [squares, setSquares] = React.useState(
     Array(BOARD_SIZE*BOARD_SIZE).fill({ player: null, round: null, isBlur: false})
   );
@@ -32,27 +39,60 @@ const Game = () => {
     }
   }, [gameRecord.length])
 
+  React.useEffect(()=> {
+    if(gameInfo.player === 2){
+      newStep(gameInfo.player, squares);
+    }
+  }, [gameInfo.round])
+  
+
   // 更新盤面狀態 執棋者 回合數 輸贏
   const updateGameInfo = (nowRound, newSquares) => {
+    let playerSquares = newSquares.map(item => item.player);
       Axios.post(
-        `http://${location.hostname}:3000/calculateWinner`,
+        `http://${location.hostname}:3000/calculateSituation`,
         {
-          squares: newSquares
+          playerSquares
         })
       .then(function (response) {
         const { winner } = response.data
 
-        if(winner) {
+        if(winner > 0) {
           setGameInfo({player: winner, round: nowRound, isWin: true})
         } else {
           const newRound = nowRound + 1
           setGameInfo({ player: newRound % 2 + 1, round: newRound, isWin: false})
+          
         }
       })
       .catch(function (error) {
         console.error(error);
       });
   }
+
+  const newStep = (player, newSquares) => {
+    let playerSquares = newSquares.map(item => item.player);
+    setIsLoading(true);
+    Axios.post(
+      `http://${location.hostname}:3000/getStep`,
+      {
+        player,
+        playerSquares
+      })
+    .then(function (response) {
+      setIsLoading(false);
+      let { stepIndex } = response.data;
+      let { row, col } = coordinate(stepIndex)
+      handleSquareClick(stepIndex)
+      console.warn('!', String.fromCharCode(col + 65), row + 1);
+    })
+    .catch(function (error) {
+      setIsLoading(false);
+      console.error(error);
+    });
+  }
+
+
 
   // 點擊棋盤空位 下棋
   const handleSquareClick = index => {
@@ -112,6 +152,7 @@ const Game = () => {
         "white-round": !isWin && player === 2 }
       )} 
       >
+      {isLoading && <div className="loading" >Loading...</div>}
       <GameInfo {...gameInfo} />
       <Board
         squares={squares}

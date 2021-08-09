@@ -8,6 +8,19 @@ $min-board-size: 200px;
   user-select: none;
 }
 
+.loading {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 50px;
+}
+
 .game-info {
   display: flex;
   align-items: center;

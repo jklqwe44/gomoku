@@ -5,4 +5,4 @@
 
 Code: [https://github.com/jklqwe44/gomoku](https://github.com/jklqwe44/gomoku)
 
-Demo: [https://jklqwe44.github.io/gomoku/](https://jklqwe44.github.io/gomoku/)
+Demo: [https://jklqwe44.github.io/go-mo-ku/](https://jklqwe44.github.io/go-mo-ku/)

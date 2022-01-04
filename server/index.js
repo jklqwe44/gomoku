@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 8080
 const cors = require("cors");
 
 app.use(cors());
@@ -10,6 +10,10 @@ app.use(
   })
 )
 app.use(express.json())
+
+app.get('/', (req, res) => {
+    res.send('GOMOKU test');
+});
 
 app.post('/calculateSituation', (req, res) => {
     let { playerSquares } = req.body;
@@ -26,9 +30,12 @@ app.post('/getStep', (req, res) => {
     res.end();
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+const server = app.listen(port, () => {
+    const host = server.address().address;
+    const port = server.address().port;
+
+    console.log(`Example app listening at http://${host}:${port}`);
+});
 
 // 分數權重
 const SCORE_WEIGHT = [0, 1, 10, 100, 1000, 100000];

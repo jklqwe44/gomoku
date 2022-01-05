@@ -45,6 +45,8 @@ const BOARD_SIZE = 9
 const WIN_SIZE = 5
 // 計算勝負用陣列
 const NEIGHBOR_LIST = Array(WIN_SIZE).fill(null).map((_,i) => i)
+// 深度
+const DEPTH = 3
 
 // 一維座標 轉 二維
 const coordinate = index => ({
@@ -164,8 +166,6 @@ const isRemote = (array, index) => {
     return true;
 }
 
-let as = 0;
-
 const minMaxTree = (playerSquares, player, depth) => {
     let stepIndex = -1;
     let stepScore = 0;
@@ -177,7 +177,7 @@ const minMaxTree = (playerSquares, player, depth) => {
             stepArray[index] = player;
             let { scores, winner } = calculateSituation(stepArray);
             let newScore = 0
-            if(depth <= 3 && winner === 0) {
+            if(depth <= DEPTH && winner === 0) {
                let subResult = minMaxTree(stepArray, 3-player, depth+1);
                subScore = subResult.stepScore;
                newScore = -subScore;

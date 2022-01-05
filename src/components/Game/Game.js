@@ -84,7 +84,7 @@ const Game = () => {
       let { stepIndex } = response.data;
       let { row, col } = coordinate(stepIndex)
       handleSquareClick(stepIndex)
-      console.warn('!', String.fromCharCode(col + 65), row + 1);
+      console.info('step:', String.fromCharCode(col + 65), row + 1);
     })
     .catch(function (error) {
       setIsLoading(false);

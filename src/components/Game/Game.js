@@ -50,7 +50,7 @@ const Game = () => {
   const updateGameInfo = (nowRound, newSquares) => {
     let playerSquares = newSquares.map(item => item.player);
       Axios.post(
-        `https://jklqwe44.de.r.appspot.com/calculateSituation`,
+        `https://jklqwe44.de.r.appspot.com/gomoku/calculateSituation`,
         {
           playerSquares
         })
@@ -74,7 +74,7 @@ const Game = () => {
     let playerSquares = newSquares.map(item => item.player);
     setIsLoading(true);
     Axios.post(
-      `https://jklqwe44.de.r.appspot.com/getStep`,
+      `https://jklqwe44.de.r.appspot.com/gomoku/getStep`,
       {
         player,
         playerSquares

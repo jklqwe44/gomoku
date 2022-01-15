@@ -7,6 +7,8 @@ import Piece from "../../components/Piece";
 import GameRecord from "../../components/GameRecord";
 import './Game.scss';
 
+const API_URL = 'https://jklqwe44.de.r.appspot.com'; // 'http://localhost:3000'
+
 // 遊戲狀態
 const GameInfo = ({ round, player, isWin }) => (
   <div className="game-info">
@@ -24,7 +26,7 @@ const coordinate = index => ({
 })
 
 const Game = () => {
-  const [gameInfo, setGameInfo] = React.useState({ player: 1, round: 0, isWin: false});
+  const [gameInfo, setGameInfo] = React.useState({ player: 1, round: 0, lastIndex: -1, isWin: false});
   const [gameRecord, setGameRecord] = React.useState([]);
   const gameRecordRef = React.useRef(null); 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -44,13 +46,18 @@ const Game = () => {
       newStep(gameInfo.player, squares);
     }
   }, [gameInfo.round])
-  
+
+  // React.useEffect(()=> {
+  //   if(gameInfo.player === 1 && gameInfo.round > 1){
+  //     newStep(gameInfo.player, squares);
+  //   }
+  // }, [gameInfo.round])
 
   // 更新盤面狀態 執棋者 回合數 輸贏
-  const updateGameInfo = (nowRound, newSquares) => {
+  const updateGameInfo = (nowRound, newSquares, lastIndex) => {
     let playerSquares = newSquares.map(item => item.player);
       Axios.post(
-        `https://jklqwe44.de.r.appspot.com/gomoku/calculateSituation`,
+        `${API_URL}/gomoku/calculateSituation`,
         {
           playerSquares
         })
@@ -58,10 +65,10 @@ const Game = () => {
         const { winner } = response.data
 
         if(winner > 0) {
-          setGameInfo({player: winner, round: nowRound, isWin: true})
+          setGameInfo({player: winner, round: nowRound, lastIndex, isWin: true})
         } else {
           const newRound = nowRound + 1
-          setGameInfo({ player: newRound % 2 + 1, round: newRound, isWin: false})
+          setGameInfo({ player: newRound % 2 + 1, round: newRound, lastIndex, isWin: false})
           
         }
       })
@@ -74,25 +81,26 @@ const Game = () => {
     let playerSquares = newSquares.map(item => item.player);
     setIsLoading(true);
     Axios.post(
-      `https://jklqwe44.de.r.appspot.com/gomoku/getStep`,
+      `${API_URL}/gomoku/alphaBetaCut`,
       {
         player,
-        playerSquares
+        playerSquares,
+        depth: 4
       })
     .then(function (response) {
       setIsLoading(false);
-      let { stepIndex } = response.data;
+      let { stepIndex, stepScore, totalCalculate } = response.data;
       let { row, col } = coordinate(stepIndex)
       handleSquareClick(stepIndex)
-      console.info('step:', String.fromCharCode(col + 65), row + 1);
+      console.info(
+        'step (' + String.fromCharCode(col + 65) + ',' + (row + 1) + ')',
+        'score ', stepScore , ' cal ', String(totalCalculate).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     })
     .catch(function (error) {
       setIsLoading(false);
       console.error(error);
     });
   }
-
-
 
   // 點擊棋盤空位 下棋
   const handleSquareClick = index => {
@@ -108,7 +116,7 @@ const Game = () => {
       const newGameRecord = [...gameRecord].concat({player: newPlayer, round, index})
       setGameRecord(newGameRecord)
 
-      updateGameInfo(round, newSquares)
+      updateGameInfo(round, newSquares, index)
     }
   }
 
@@ -119,7 +127,8 @@ const Game = () => {
       const { round: itemRound  } = item
       return {
         ...item,
-        isBlur: round !== null && itemRound > round
+        isBlur: round !== null && itemRound > round,
+        isActive: round !== null && itemRound === round,
       }
     }))
   }
@@ -135,15 +144,21 @@ const Game = () => {
     })
     setSquares(newSquares)
 
+    let lastIndex = -1
+
     const newGameRecord = [...gameRecord].filter(
-      ({ round: itemRound }) => itemRound <= round
+      ({ round: itemRound, index: itemIndex }) => {
+        if(itemRound === round) {
+          lastIndex = itemIndex
+        }
+        return itemRound <= round
+      }
     )
     setGameRecord(newGameRecord)
-
-    updateGameInfo(round, newSquares)
+    updateGameInfo(round, newSquares, lastIndex)
   }
 
-  const { player, isWin } = gameInfo
+  const { player, isWin, lastIndex } = gameInfo
 
   return (
     <div className={classNames(
@@ -156,6 +171,7 @@ const Game = () => {
       <GameInfo {...gameInfo} />
       <Board
         squares={squares}
+        lastIndex={lastIndex}
         onSquareClick={handleSquareClick}
       />
       <GameRecord 

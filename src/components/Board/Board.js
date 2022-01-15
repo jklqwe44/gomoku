@@ -21,7 +21,7 @@ const Square = ({ children, row, col, onClick }) => (
 )
 
 // 棋盤
-const Board = ({ squares, onSquareClick }) => (
+const Board = ({ squares, lastIndex, onSquareClick }) => (
   <div className="board-width-container">
     <div className="board-container">
       <div className="board">
@@ -30,7 +30,7 @@ const Board = ({ squares, onSquareClick }) => (
             {Array(BOARD_SIZE).fill(null).map((_, j) => 
               {
                 const index = i*BOARD_SIZE + j
-                const { player, isBlur } = squares[index]
+                const { player, isBlur, isActive } = squares[index]
                 return (
                   <Square
                     key={`square-${index}`}
@@ -38,7 +38,11 @@ const Board = ({ squares, onSquareClick }) => (
                     col={j}
                     onClick={() => onSquareClick(index)}
                   >
-                    <Piece isBlur={isBlur} value={player} />
+                    <Piece 
+                      isBlur={isBlur} 
+                      value={player} 
+                      isActive={lastIndex===index || isActive}
+                    />
                   </Square>
                 )
               }

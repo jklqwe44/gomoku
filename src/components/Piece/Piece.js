@@ -3,7 +3,7 @@ import classNames from "classnames";
 import './Piece.scss';
 
 // 棋子
-const Piece = ({ className, isBlur, value }) => (
+const Piece = ({ className, isBlur, isActive, value }) => (
   <div 
     className={classNames(
       "piece",
@@ -11,7 +11,8 @@ const Piece = ({ className, isBlur, value }) => (
        "none": !value,
        "black": value === 1, 
        "white": value === 2,
-       "blur": isBlur
+       "blur": isBlur,
+       "active": isActive
       }, 
       className
     )} 

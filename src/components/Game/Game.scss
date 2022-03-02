@@ -33,7 +33,7 @@ $min-board-size: 200px;
   }
   
   .text {
-    font-size: 3vh;
+    font-size: calc(min(3vh, 3vw));
     color: rgba(255, 255, 255, 0.7);
   }
 }
@@ -52,7 +52,7 @@ $min-board-size: 200px;
   }
 
   .round {
-    font-size: 2vh;
+    font-size: calc(min(2vh, 2vw));
     margin-bottom: 2px;
   }
   

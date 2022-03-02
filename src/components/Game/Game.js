@@ -85,7 +85,7 @@ const Game = () => {
       {
         player,
         playerSquares,
-        depth: 4
+        depth: 3
       })
     .then(function (response) {
       setIsLoading(false);

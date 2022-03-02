@@ -14,7 +14,7 @@ $min-board-size: 200px;
   }
 
   .round {
-    font-size: 2vh;
+    font-size: calc(min(2vh, 2vw));
     margin-bottom: 2px;
   }
   

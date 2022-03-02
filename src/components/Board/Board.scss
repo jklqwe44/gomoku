@@ -65,7 +65,7 @@ $min-board-size: 200px;
 .coordinate {
   position: absolute;
   flex: 1;
-  font-size: 2vh;
+  font-size: calc(min(2vh, 2vw));
   color: rgba(0, 0, 0, 60%);
 
   &.col {

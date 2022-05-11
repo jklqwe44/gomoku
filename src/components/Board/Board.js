@@ -15,7 +15,7 @@ const Square = ({ children, row, col, onClick }) => (
     onClick={onClick}
   >
     {children}
-    {row === 0 && <div className='coordinate col'>{String.fromCharCode(col + 65)}</div>}
+    {row === BOARD_SIZE-1 && <div className='coordinate col'>{String.fromCharCode(col + 65)}</div>}
     {col === 0 && <div className='coordinate row'>{row + 1}</div>}
   </div>
 )

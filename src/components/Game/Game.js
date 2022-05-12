@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import classNames from "classnames";
 import Axios from "axios";
 import { BOARD_SIZE } from "../../config";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
 import GameRecord from "../../components/GameRecord";
+import ChooseColorPopup from "../../components/Popup/ChooseColorPopup";
+import WinnerPopup from "../../components/Popup/WinnerPopup";
 import './Game.scss';
 
 const API_URL = 'https://jklqwe44.de.r.appspot.com'; // 'http://localhost:3000'
@@ -26,11 +28,13 @@ const coordinate = index => ({
 })
 
 const Game = () => {
-  const [gameInfo, setGameInfo] = React.useState({ player: 1, round: 0, lastIndex: -1, isWin: false});
-  const [gameRecord, setGameRecord] = React.useState([]);
-  const gameRecordRef = React.useRef(null); 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [squares, setSquares] = React.useState(
+  const [gameInfo, setGameInfo] = useState({ player: 1, round: 0, lastIndex: -1, isWin: false});
+  const [playerColor, setPlayerColor] = useState(-1);
+  const [gameRecord, setGameRecord] = useState([]);
+  const gameRecordRef = useRef(null); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCloseWinner, setIsCloseWinner] = useState(false);
+  const [squares, setSquares] = useState(
     Array(BOARD_SIZE*BOARD_SIZE).fill({ player: null, round: null, isBlur: false})
   );
 
@@ -42,16 +46,33 @@ const Game = () => {
   }, [gameRecord.length])
 
   React.useEffect(()=> {
-    if(gameInfo.player === 2){
+    if(playerColor > 0 && gameInfo.player !== playerColor){
       newStep(gameInfo.player, squares);
     }
-  }, [gameInfo.round])
+  }, [gameInfo.round, playerColor])
 
   // React.useEffect(()=> {
   //   if(gameInfo.player === 1 && gameInfo.round > 1){
   //     newStep(gameInfo.player, squares);
   //   }
   // }, [gameInfo.round])
+
+  const handleChooseColor = color => {
+    setPlayerColor(color);
+  }
+
+  // 關閉 勝利彈窗
+  const handleCloseWinner = () => {
+    setIsCloseWinner(true);
+  }
+
+  const handleRestart = () => {
+    setIsCloseWinner(false);
+    setPlayerColor(-1);
+    setGameInfo({ player: 1, round: 0, lastIndex: -1, isWin: false});
+    setGameRecord([]);
+    setSquares(Array(BOARD_SIZE*BOARD_SIZE).fill({ player: null, round: null, isBlur: false}))
+  }
 
   // 更新盤面狀態 執棋者 回合數 輸贏
   const updateGameInfo = (nowRound, newSquares, lastIndex) => {
@@ -118,6 +139,8 @@ const Game = () => {
 
       updateGameInfo(round, newSquares, index)
     }
+
+    setIsCloseWinner(false);
   }
 
   // 預看紀錄 呈現記錄點盤面
@@ -180,6 +203,8 @@ const Game = () => {
         onRecordHover={handleRecordHover}
         onRecordClick={handleRecordClick}
       />
+      {playerColor === -1 && <ChooseColorPopup handleChooseColor={handleChooseColor}/>}
+      {isWin && !isCloseWinner && <WinnerPopup winner={player} onClose={handleCloseWinner} onRestart={handleRestart}/>}
     </div>
   );
 }

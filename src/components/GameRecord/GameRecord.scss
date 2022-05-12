@@ -13,6 +13,23 @@ $min-board-size: 200px;
     background: rgba(100, 160, 200, 0.3);
   }
 
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); 
+  }
+   
+  &::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 6px;
+
+    &:hover {
+      background: #5392b3;
+    }
+  }
+
   .round {
     font-size: calc(min(2vh, 2vw));
     margin-bottom: 2px;
